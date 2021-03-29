@@ -7,6 +7,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
@@ -56,6 +57,7 @@ public class FileTreeImpl implements FileTree {
     private StringBuilder getFiles(File file) {
         StringBuilder builder = new StringBuilder();
         List<File> directoryFiles = getDirectoryFiles(file);
+
         directoryFiles.forEach(directoryFile -> {
             builder.append(getSubDirectory(directoryFiles, directoryFile));
             builder.append(getLastSubDirectory(directoryFiles, directoryFile));
@@ -71,7 +73,7 @@ public class FileTreeImpl implements FileTree {
         StringBuilder builder = new StringBuilder();
         if (directoryFile.isDirectory() && !isLastFile(directoryFiles, directoryFile)) {
             try {
-                builder.append(addLine(SPACE_INDENT, getAmountSubDirectories(rootPath, directoryFile)))
+                builder.append(addLine(INDENT, getAmountSubDirectories(rootPath, directoryFile)))
                         .append(NODE).append(getDirectoryWithBytes(directoryFile.toPath(), directoryFile));
             } catch (IOException e) {
                 e.printStackTrace();
@@ -85,7 +87,7 @@ public class FileTreeImpl implements FileTree {
         StringBuilder builder = new StringBuilder();
         if (directoryFile.isDirectory() && isLastFile(directoryFiles, directoryFile)) {
             try {
-                builder.append(addLine(SPACE_INDENT, getAmountSubDirectories(rootPath, directoryFile)))
+                builder.append(addLine(INDENT, getAmountSubDirectories(rootPath, directoryFile)))
                         .append(ANGLE).append(getDirectoryWithBytes(directoryFile.toPath(), directoryFile));
             } catch (IOException e) {
                 e.printStackTrace();
@@ -99,7 +101,7 @@ public class FileTreeImpl implements FileTree {
         StringBuilder builder = new StringBuilder();
         if (directoryFile.isFile() && !isLastFile(directoryFiles, directoryFile)) {
             try {
-                builder.append(addLine(SPACE_INDENT, getAmountSubDirectories(rootPath, directoryFile)))
+                builder.append(addLine(INDENT, getAmountSubDirectories(rootPath, directoryFile)))
                         .append(NODE).append(getResultToString(directoryFile.toPath())).append(NEW_LINE);
             } catch (IOException e) {
                 e.printStackTrace();
@@ -112,7 +114,7 @@ public class FileTreeImpl implements FileTree {
         StringBuilder builder = new StringBuilder();
         if (directoryFile.isFile() && isLastFile(directoryFiles, directoryFile)) {
             try {
-                builder.append(addLine(SPACE_INDENT, getAmountSubDirectories(rootPath, directoryFile)))
+                builder.append(addLine(INDENT, getAmountSubDirectories(rootPath, directoryFile)))
                         .append(ANGLE).append(getResultToString(directoryFile.toPath())).append(NEW_LINE);
             } catch (IOException e) {
                 e.printStackTrace();
