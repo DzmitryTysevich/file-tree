@@ -28,7 +28,7 @@ public class FileTreeImpl implements FileTree {
     public Optional<String> tree(Path path) {
         rootPath = path;
         StringBuilder builder = new StringBuilder();
-        if (path != null && new File(String.valueOf(path)).isDirectory()) {
+        if (path != null && Files.isDirectory(path)) {
             try {
                 List<File> catalog = getCatalog(path);
                 catalog.forEach(file -> builder.append(printTree(path, file)));
@@ -37,7 +37,7 @@ public class FileTreeImpl implements FileTree {
             }
             return Optional.of(builder.toString());
         }
-        if (path != null && new File(String.valueOf(path)).isFile()) {
+        if (path != null && Files.isRegularFile(path)) {
             return getOptionalResult(path);
         } else return Optional.empty();
     }
@@ -167,6 +167,7 @@ public class FileTreeImpl implements FileTree {
     private List<File> getDirectoryFiles(File file) {
         return Arrays.stream(Objects.requireNonNull(file.listFiles()))
                 .sorted((o2, o1) -> o2.toString().compareToIgnoreCase(o1.toString()))
+                .sorted((o1, o2) -> (Files.isDirectory(o2.toPath()) ? 1 : 0) - (Files.isDirectory(o1.toPath()) ? 1 : 0))
                 .collect(Collectors.toList());
     }
 
